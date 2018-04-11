@@ -11,10 +11,14 @@ export default class GraphicsCreator {
     }
 
     scalePoints() {
+        const bufferArray = [];
         this.pointsArray.forEach((point) => {
-            point.x *= SCALE;
-            point.y *= SCALE;
+            bufferArray.push({
+                x: point.x * SCALE,
+                y: point.y * SCALE,
+            });
         });
+        this.pointsArray = bufferArray;
     }
 
     static drawLine(x1, y1, x2, y2, holst) {

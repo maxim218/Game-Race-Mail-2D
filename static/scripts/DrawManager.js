@@ -2,6 +2,7 @@
 
 import LogMessage from "./MessageLogger";
 import GraphicsCreator from "./GraphicsCreator";
+import HeroesInfoGetter from "./HeroesInfoGetter";
 
 const SIMPLE_BACKGROUND_COLOR = "#534d94";
 const HOLST_WIDTH = 900;
@@ -12,20 +13,6 @@ const BORDER_LINES_STYLE = "#FF0000";
 const BORDER_TOP_Y = 100;
 const BORDER_BOTTOM_Y = 500;
 
-const ROCKET_POINTS_ARRAY = [
-    {x: 0, y: 0},
-    {x: 0, y: 4},
-    {x: 1, y: 4},
-    {x: 2, y: 3},
-    {x: 6, y: 3},
-    {x: 7, y: 2},
-    {x: 6, y: 1},
-    {x: 2, y: 1},
-    {x: 1, y: 0},
-];
-
-const ROCKET_COLOR = "#FFFFFF";
-
 
 export default class DrawManager {
     constructor(canvasPlain) {
@@ -33,6 +20,10 @@ export default class DrawManager {
         this.holst = canvasPlain.getContext("2d");
         this.holst.lineWidth = LINE_WIDTH;
         this.drawSimpleBackGround();
+    }
+
+    getHolst() {
+        return this.holst;
     }
 
     drawSimpleBackGround() {
@@ -52,7 +43,7 @@ export default class DrawManager {
             x: x,
             y: y,
         };
-        this.rocketGraphics = new GraphicsCreator(ROCKET_POINTS_ARRAY, ROCKET_COLOR, this.holst);
+        this.rocketGraphics = new GraphicsCreator(HeroesInfoGetter.getRocketPointsArray(), HeroesInfoGetter.getRocketColor(), this.holst);
         this.drawRocket();
     }
 
@@ -60,8 +51,21 @@ export default class DrawManager {
         this.rocketGraphics.drawGraphicsObject(this.rocket.x, this.rocket.y);
     }
 
+    initEnemiesArray(enemiesArr) {
+        this.enemiesArr = enemiesArr;
+    }
+
+    drawAllEnemies() {
+        if(this.enemiesArr !== null) {
+            this.enemiesArr.forEach((enemy) => {
+                enemy.render.drawGraphicsObject(enemy.x, enemy.y);
+            });
+        }
+    }
+
     renderAll() {
         this.drawSimpleBackGround();
         this.drawRocket();
+        this.drawAllEnemies();
     }
 }
