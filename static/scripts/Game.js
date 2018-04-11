@@ -18,6 +18,7 @@ const COUNT_RIGHT_BORDER = 40;
 
 const START_ENEMY_X_POSITION = 1000;
 const START_ENEMY_Y_POSITION = 100;
+const ENEMY_DELETE_X_POSITION = -150;
 const ENEMY_HEIGHT = 80;
 
 const LINES_ARRAY = [
@@ -63,6 +64,10 @@ class Game {
         this.drawManager.initEnemiesArray(this.enemiesArr);
     }
 
+    printEnemiesNumber() {
+        LogMessage("Enemies: " + this.enemiesArr.length);
+    }
+
     addEnemiesLine() {
         const lineNumber = getRandomNumber(LINES_ARRAY.length);
         const arr = LINES_ARRAY[lineNumber];
@@ -76,6 +81,19 @@ class Game {
                 });
             }
         });
+        this.printEnemiesNumber();
+    }
+
+    killEnemies() {
+        const bufferEnemies = [];
+        this.enemiesArr.forEach((enemy) => {
+            if(enemy.x > ENEMY_DELETE_X_POSITION) {
+                bufferEnemies.push(enemy);
+            }
+        });
+
+        this.enemiesArr = bufferEnemies;
+        this.drawManager.initEnemiesArray(this.enemiesArr);
     }
 
     moveAllEnemies() {
@@ -99,6 +117,8 @@ class Game {
                 this.count = 0;
                 this.addEnemiesLine();
             }
+
+            this.killEnemies();
 
             this.changeRocketPosition();
             this.moveAllEnemies();
