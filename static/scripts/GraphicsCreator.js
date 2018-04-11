@@ -17,12 +17,12 @@ export default class GraphicsCreator {
         });
     }
 
-    drawLine(x1, y1, x2, y2) {
-        this.holst.beginPath();
-        this.holst.moveTo(x1, y1);
-        this.holst.lineTo(x2, y2);
-        this.holst.closePath();
-        this.holst.stroke();
+    static drawLine(x1, y1, x2, y2, holst) {
+        holst.beginPath();
+        holst.moveTo(x1, y1);
+        holst.lineTo(x2, y2);
+        holst.closePath();
+        holst.stroke();
     }
 
     drawGraphicsObject(dx, dy) {
@@ -31,11 +31,11 @@ export default class GraphicsCreator {
             if(i !== this.pointsArray.length - 1) {
                 const pointFirst = this.pointsArray[i];
                 const pointSecond = this.pointsArray[i + 1];
-                this.drawLine(pointFirst.x + dx, pointFirst.y + dy, pointSecond.x + dx, pointSecond.y + dy);
+                GraphicsCreator.drawLine(pointFirst.x + dx, pointFirst.y + dy, pointSecond.x + dx, pointSecond.y + dy, this.holst);
             } else {
                 const pointFirst = this.pointsArray[i];
                 const pointSecond = this.pointsArray[0];
-                this.drawLine(pointFirst.x + dx, pointFirst.y + dy, pointSecond.x + dx, pointSecond.y + dy);
+                GraphicsCreator.drawLine(pointFirst.x + dx, pointFirst.y + dy, pointSecond.x + dx, pointSecond.y + dy, this.holst);
             }
         }
     }
