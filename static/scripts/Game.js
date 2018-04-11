@@ -7,14 +7,15 @@ import getRandomNumber from "./RandomGetter";
 import HeroesInfoGetter from "./HeroesInfoGetter";
 import GraphicsCreator from "./GraphicsCreator";
 
-const START_SPEED = 8;
+const START_SPEED = 12;
+const DELTA_SPEED = 0.2;
 
 const ROCKET_START_POSITION_X = 100;
 const ROCKET_START_POSITION_Y = 260;
 
-const WAIT_TIME_INTEVAL = 20;
+const WAIT_TIME_INTEVAL = 25;
 
-const COUNT_RIGHT_BORDER = 40;
+const COUNT_RIGHT_BORDER = 30;
 
 const START_ENEMY_X_POSITION = 1000;
 const START_ENEMY_Y_POSITION = 100;
@@ -110,12 +111,18 @@ class Game {
         this.drawManager.rocket.y = this.rocketMoveManager.getRocketPosition();
     }
 
+    printSpeedInfo() {
+        LogMessage("Speed: " + this.speed);
+    }
+
     startRepeatingActions() {
         this.interval = setInterval(() => {
             this.count += 1;
             if(this.count === COUNT_RIGHT_BORDER) {
                 this.count = 0;
                 this.addEnemiesLine();
+                this.speed += DELTA_SPEED;
+                this.printSpeedInfo();
             }
 
             this.killEnemies();
