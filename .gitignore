@@ -1,0 +1,7 @@
+node_modules/
+node_modules
+.idea/
+.idea
+*RESULT.js
+RESULT.js
+*npm-debug.log
