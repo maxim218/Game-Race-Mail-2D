@@ -182,9 +182,14 @@ class Game {
                 this.controlHit();
             } else {
                 clearInterval(this.interval);
-                LogMessage("--- STOP GAME INTERVAL ---")
+                LogMessage("--- STOP GAME INTERVAL ---");
+                this.startAnimationOpacity();
             }
         }, WAIT_TIME_INTEVAL);
+    }
+
+    startAnimationOpacity() {
+
     }
 }
 

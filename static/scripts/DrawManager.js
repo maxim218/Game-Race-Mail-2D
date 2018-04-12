@@ -10,7 +10,7 @@ const HOLST_WIDTH = 900;
 const HOLST_HEIGHT = 600;
 const LINE_WIDTH = 2;
 
-const BORDER_LINES_STYLE = "#FF0000";
+const BORDER_LINES_STYLE = "#2bbab3";
 const BORDER_TOP_Y = 100;
 const BORDER_BOTTOM_Y = 500;
 
@@ -63,13 +63,12 @@ export default class DrawManager {
             // fon not loaded
         }
 
-        if(getDebugMode() === true) {
-            this.drawBorderLines();
-        }
+        this.drawBorderLines();
     }
 
     drawBorderLines() {
         this.holst.strokeStyle = BORDER_LINES_STYLE;
+        this.holst.setLineDash([50, 30]);
         GraphicsCreator.drawLine(0, BORDER_TOP_Y, HOLST_WIDTH, BORDER_TOP_Y, this.holst);
         GraphicsCreator.drawLine(0, BORDER_BOTTOM_Y, HOLST_WIDTH, BORDER_BOTTOM_Y, this.holst);
     }
