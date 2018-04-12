@@ -19,12 +19,25 @@ const ENEMY_SIZE = 80;
 const ROCKET_WIDTH = 140;
 const ROCKET_HEIGHT = 80;
 
+const FON_IMAGE_WIDTH = 1000;
+const FON_IMAGE_HEIGHT = 700;
+const FON_X = -50;
+const FON_Y = -50;
+const DELTA_ANGLE = 0.01;
+const MAX_ANGLE = 4 * Math.PI;
+const FON_RADIUS = 30;
+
 export default class DrawManager {
     constructor(canvasPlain) {
         LogMessage("create DrawManager");
         this.holst = canvasPlain.getContext("2d");
         this.holst.lineWidth = LINE_WIDTH;
+        this.initFonAngle();
         this.drawSimpleBackGround();
+    }
+
+    initFonAngle() {
+        this.angle = 0;
     }
 
     getHolst() {
@@ -35,8 +48,17 @@ export default class DrawManager {
         this.holst.fillStyle = SIMPLE_BACKGROUND_COLOR;
         this.holst.fillRect(0, 0, HOLST_WIDTH, HOLST_HEIGHT);
 
+        this.angle += DELTA_ANGLE;
+
+        if(this.angle > MAX_ANGLE) {
+            this.angle = 0;
+        }
+
+        const fonX = FON_X + Math.cos(this.angle) * FON_RADIUS;
+        const fonY = FON_Y + Math.sin(this.angle) * FON_RADIUS;
+
         try {
-            this.holst.drawImage(this.imageLoader.getFon(), -50, -50, 1000, 700);
+            this.holst.drawImage(this.imageLoader.getFon(), fonX, fonY, FON_IMAGE_WIDTH, FON_IMAGE_HEIGHT);
         } catch (err) {
             // fon not loaded
         }

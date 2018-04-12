@@ -11,13 +11,16 @@ import getDebugMode from "./DebugModeSetter";
 
 const START_SPEED = 12;
 const DELTA_SPEED = 0.2;
+const MAX_SPEED = 50;
 
 const ROCKET_START_POSITION_X = 100;
 const ROCKET_START_POSITION_Y = 260;
 
 const WAIT_TIME_INTEVAL = 35;
 
-const COUNT_RIGHT_BORDER = 30;
+const START_COUNT_RIGHT_BORDER = 30;
+const COUNT_LEFT_BORDER = 16.25;
+const DELTA_COUNT_RIGHT_BORDER = 0.1;
 
 const START_ENEMY_X_POSITION = 1000;
 const START_ENEMY_Y_POSITION = 100;
@@ -45,6 +48,7 @@ class Game {
         this.createRocketMoveManager();
         this.createEnemiesArray();
         this.createCounter();
+        this.initCountRightBorder();
         this.setSpeed();
         this.imageLoader = new ImageLoader(this);
         this.drawManager.initImageLoader(this.imageLoader);
@@ -56,6 +60,10 @@ class Game {
 
     createCounter() {
         this.count = 0;
+    }
+
+    initCountRightBorder() {
+        this.countRightBorder = START_COUNT_RIGHT_BORDER;
     }
 
     createHeroRocket() {
@@ -121,15 +129,25 @@ class Game {
         LogMessage("Speed: " + this.speed);
     }
 
+    printCountRightBorderInfo() {
+        LogMessage("RightBorder: " + this.countRightBorder);
+    }
+
     startRepeatingActions() {
         LogMessage("--- START GAME INTERVAL ---");
         this.interval = setInterval(() => {
             this.count += 1;
-            if(this.count === COUNT_RIGHT_BORDER) {
+            if(this.count === parseInt(this.countRightBorder)) {
                 this.count = 0;
+                if(this.countRightBorder >= COUNT_LEFT_BORDER) {
+                    this.countRightBorder -= DELTA_COUNT_RIGHT_BORDER;
+                }
                 this.addEnemiesLine();
-                this.speed += DELTA_SPEED;
+                if(this.speed < MAX_SPEED) {
+                    this.speed += DELTA_SPEED;
+                }
                 this.printSpeedInfo();
+                this.printCountRightBorderInfo();
             }
 
             this.killEnemies();
