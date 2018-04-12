@@ -6,6 +6,8 @@ import RocketMoveManager from "./RocketMoveManager";
 import getRandomNumber from "./RandomGetter";
 import HeroesInfoGetter from "./HeroesInfoGetter";
 import GraphicsCreator from "./GraphicsCreator";
+import ImageLoader from "./ImageLoader";
+import getDebugMode from "./DebugModeSetter";
 
 const START_SPEED = 12;
 const DELTA_SPEED = 0.2;
@@ -13,7 +15,7 @@ const DELTA_SPEED = 0.2;
 const ROCKET_START_POSITION_X = 100;
 const ROCKET_START_POSITION_Y = 260;
 
-const WAIT_TIME_INTEVAL = 25;
+const WAIT_TIME_INTEVAL = 35;
 
 const COUNT_RIGHT_BORDER = 30;
 
@@ -44,8 +46,8 @@ class Game {
         this.createEnemiesArray();
         this.createCounter();
         this.setSpeed();
-
-        this.startRepeatingActions();
+        this.imageLoader = new ImageLoader(this);
+        this.drawManager.initImageLoader(this.imageLoader);
     }
 
     setSpeed() {
@@ -74,7 +76,11 @@ class Game {
         const arr = LINES_ARRAY[lineNumber];
         arr.forEach((number, i) => {
             if(number === 0) {
-                const render = new GraphicsCreator(HeroesInfoGetter.getFirstEnemyPointsArray(), HeroesInfoGetter.getFirstEnemyColor(), this.drawManager.getHolst());
+                let render = null;
+                if(getDebugMode() === true) {
+                    render = new GraphicsCreator(HeroesInfoGetter.getFirstEnemyPointsArray(), HeroesInfoGetter.getFirstEnemyColor(), this.drawManager.getHolst());
+                }
+
                 this.enemiesArr.push({
                     x: START_ENEMY_X_POSITION,
                     y: ENEMY_HEIGHT * i + START_ENEMY_Y_POSITION,
@@ -116,6 +122,7 @@ class Game {
     }
 
     startRepeatingActions() {
+        LogMessage("--- START GAME INTERVAL ---");
         this.interval = setInterval(() => {
             this.count += 1;
             if(this.count === COUNT_RIGHT_BORDER) {
