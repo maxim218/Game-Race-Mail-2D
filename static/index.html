@@ -5,14 +5,16 @@
     <title>Game 2D</title>
     <style>
         body {
-            background-color: #34567e;
+            background-color: #2d445b;
+            font-family: Geneva, Arial, Helvetica, sans-serif;
+            font-size: 30px;
+            color: black;
         }
 
         .gameBox {
             margin: 0 auto;
             width: 900px;
-            height: 750px;
-            padding: 15px;
+            padding: 20px;
             background-color: white;
             border-radius: 8px;
         }
@@ -21,6 +23,26 @@
             padding: 0;
             background-color: black;
         }
+
+        .menuBox {
+            padding-top: 35px;
+            padding-bottom: 35px;
+        }
+
+        .countField {
+            padding: 15px 25px;
+            background-color: #CCCCCC;
+            border-radius: 8px;
+        }
+
+        .restartGameBtn {
+            padding: 15px 25px;
+            background-color: #b4713b;
+            border-radius: 8px;
+            color: white;
+            margin-left: 15px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -28,6 +50,13 @@
 <div class = "gameBox">
     <div class = "canvasBox">
         <canvas width = '900px' height = '600px' class = 'canvasPlain'></canvas>
+    </div>
+    <div class = "menuBox">
+        <span class = "countField">
+            <span class = "countLabel"></span>
+            <img src = "./images/star.png" width = "35px" height = "35px">
+        </span>
+        <span class = "restartGameBtn" hidden>Попробовать ещё раз</span>
     </div>
 </div>
 

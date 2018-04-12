@@ -50,10 +50,13 @@ const START_OPACITY = 1;
 const DELTA_OPACITY = 0.01;
 const MIDDLE_OPACITY = 0.5;
 
+const DELTA_SCORE = 0.05;
+
 class Game {
     constructor() {
         LogMessage("create Game");
         this.drawManager = new DrawManager(document.querySelector(".canvasPlain"));
+        this.initScore();
         this.createHeroRocket();
         this.createRocketMoveManager();
         this.createEnemiesArray();
@@ -63,6 +66,17 @@ class Game {
         this.initGameFlag();
         this.imageLoader = new ImageLoader(this);
         this.drawManager.initImageLoader(this.imageLoader);
+    }
+
+    initScore() {
+        this.countLabel = document.querySelector(".countLabel");
+        this.scorePoints = 0;
+        this.countLabel.innerHTML = this.scorePoints.toString();
+    }
+
+    addScore() {
+        this.scorePoints += DELTA_SCORE;
+        this.countLabel.innerHTML = parseInt(this.scorePoints).toString();
     }
 
     initGameFlag() {
@@ -183,6 +197,7 @@ class Game {
                 this.changeRocketPosition();
                 this.moveAllEnemies();
                 this.drawManager.renderAll();
+                this.addScore();
                 this.controlHit();
             } else {
                 clearInterval(this.interval);
@@ -203,11 +218,22 @@ class Game {
             if(opacity <= MIDDLE_OPACITY) {
                 clearInterval(this.opacityInterval);
                 LogMessage("=== STOP OPACITY INTERVAL ===");
+                Game.renderRestartBtn();
             }
         }, WAIT_TIME_INTEVAL);
+    }
+
+    static renderRestartBtn() {
+        document.querySelector(".restartGameBtn").hidden = false;
     }
 }
 
 window.onload = function() {
     const game = new Game();
+
+    document.querySelector(".restartGameBtn").onclick = function() {
+        document.querySelector(".restartGameBtn").hidden = true;
+        document.querySelector(".canvasPlain").style.opacity = 1;
+        const game = new Game();
+    }
 };
