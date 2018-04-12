@@ -46,6 +46,10 @@ const LINES_ARRAY = [
     [1,1,0,0,0],
 ];
 
+const START_OPACITY = 1;
+const DELTA_OPACITY = 0.01;
+const MIDDLE_OPACITY = 0.5;
+
 class Game {
     constructor() {
         LogMessage("create Game");
@@ -189,7 +193,18 @@ class Game {
     }
 
     startAnimationOpacity() {
-
+        const canvasBox = document.querySelector(".canvasPlain");
+        let opacity = START_OPACITY;
+        LogMessage("=== START OPACITY INTERVAL ===");
+        this.opacityInterval = setInterval(() => {
+            canvasBox.style.opacity = opacity.toString();
+            opacity -= DELTA_OPACITY;
+            LogMessage("Opacity: " + opacity);
+            if(opacity <= MIDDLE_OPACITY) {
+                clearInterval(this.opacityInterval);
+                LogMessage("=== STOP OPACITY INTERVAL ===");
+            }
+        }, WAIT_TIME_INTEVAL);
     }
 }
 
