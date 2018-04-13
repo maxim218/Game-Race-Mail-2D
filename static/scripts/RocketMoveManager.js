@@ -6,8 +6,8 @@ const START_POSITION = 3;
 const TOP_BORDER = 1;
 const BOTTOM_BORDER = 5;
 
-const KEY_TOP = 38;
-const KEY_BOTTOM = 40;
+const KEY_TOP = 87;
+const KEY_BOTTOM = 83;
 
 const ROCKET_HEIGHT = 80;
 const START_ROCKET_Y = 100;
