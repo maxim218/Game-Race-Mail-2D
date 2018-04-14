@@ -6,6 +6,7 @@ const ROCKET_IMAGE = "./images/rocketOK.png";
 const ENEMY_IMAGE = "./images/enemyOK.png";
 const FON_IMAGE = "./images/fonOK.png";
 const BONUS_IMAGE = "./images/bonusLive.png";
+const BALL_IMAGE = "./images/ballOK.png";
 
 export default class ImageLoader {
     constructor(game) {
@@ -13,16 +14,19 @@ export default class ImageLoader {
         this.enemyObj = null;
         this.fonObj = null;
         this.bonusObj = null;
+        this.ballObj = null;
         LogMessage("create ImageLoader");
         this.game = game;
         this.rocketImage = false;
         this.enemyImage = false;
         this.fonImage = false;
         this.bonusImage = false;
+        this.ballImage = false;
         this.loadRocket();
         this.loadEnemy();
         this.loadFon();
         this.loadBonus();
+        this.loadBall();
     }
 
     getRocket() {
@@ -41,13 +45,28 @@ export default class ImageLoader {
         return this.bonusObj;
     }
 
+    getBall() {
+        return this.ballObj;
+    }
+
     startGame() {
-        if(this.rocketImage && this.enemyImage && this.fonImage && this.bonusImage) {
+        if(this.rocketImage && this.enemyImage && this.fonImage && this.bonusImage && this.ballImage) {
             this.rocketImage = false;
             this.enemyImage = false;
             this.fonImage = false;
             this.bonusImage = false;
+            this.ballImage = false;
             this.game.startRepeatingActions();
+        }
+    }
+
+    loadBall() {
+        const img = new Image();
+        img.src = BALL_IMAGE;
+        img.onload = () => {
+            this.ballImage = true;
+            this.ballObj = img;
+            this.startGame();
         }
     }
 
