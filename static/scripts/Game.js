@@ -54,6 +54,8 @@ const DELTA_SCORE = 0.05;
 
 const MAX_LIVE_COUNT = 200;
 
+const AMMO_SPEED = 15;
+
 class Game {
     constructor() {
         LogMessage("create Game");
@@ -73,10 +75,58 @@ class Game {
         this.drawManager.initImageLoader(this.imageLoader);
     }
 
+    moveAllAmmo() {
+        this.ammoArr.forEach((ammo) => {
+            ammo.x += AMMO_SPEED;
+        });
+    }
+
+    controlHitAmmoAndEnemies() {
+        this.ammoArr.forEach((ammo) => {
+            this.enemiesArr.forEach((enemy) => {
+                if(ammo.y === enemy.y) {
+                    if(Math.abs(ammo.x - enemy.x) < 70) {
+                        enemy.x = -100;
+                    }
+                }
+            });
+        });
+    }
+
+    killAmmo() {
+        const buffer = [];
+        this.ammoArr.forEach((ammo) => {
+           if(ammo.x < 1000) {
+               buffer.push(ammo);
+           }
+        });
+        this.ammoArr = buffer;
+        this.drawManager.initAmmoArray(this.ammoArr);
+    }
+
+    fire() {
+        if(this.ammo > 0) {
+            this.ammo--;
+            this.ammoLabel.innerHTML = this.ammo.toString();
+            // push new ammo
+            this.ammoArr.push({
+                x: 250,
+                y: this.drawManager.rocket.y,
+                ammo: true,
+            });
+        } else {
+            this.ammo = 0;
+            this.ammoLabel.innerHTML = this.ammo.toString();
+        }
+    }
+
     initAmmo() {
         this.ammoLabel = document.querySelector(".ammoLabel");
         this.ammo = 9;
         this.ammoLabel.innerHTML = this.ammo.toString();
+        // init ammo array
+        this.ammoArr = [];
+        this.drawManager.initAmmoArray(this.ammoArr);
     }
 
     initGenerateLiveCount() {
@@ -232,6 +282,9 @@ class Game {
 
     createRocketMoveManager() {
         this.rocketMoveManager = new RocketMoveManager();
+        this.rocketMoveManager.initFireCallback(() => {
+            this.fire();
+        });
     }
 
     changeRocketPosition() {
@@ -270,11 +323,14 @@ class Game {
                 this.liveCount += 1;
 
                 this.killEnemies();
+                this.killAmmo();
                 this.changeRocketPosition();
+                this.moveAllAmmo();
                 this.moveAllEnemies();
                 this.drawManager.renderAll();
                 this.addScore();
                 this.controlHit();
+                this.controlHitAmmoAndEnemies();
             } else {
                 clearInterval(this.interval);
                 LogMessage("--- STOP GAME INTERVAL ---");

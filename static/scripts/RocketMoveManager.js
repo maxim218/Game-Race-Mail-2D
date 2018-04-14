@@ -8,6 +8,7 @@ const BOTTOM_BORDER = 5;
 
 const KEY_TOP = 87;
 const KEY_BOTTOM = 83;
+const KEY_FIRE = 82;
 
 const ROCKET_HEIGHT = 80;
 const START_ROCKET_Y = 100;
@@ -28,6 +29,7 @@ export default class RocketMoveManager {
         this.startPosition = START_POSITION;
         this.keyTopPushed = false;
         this.keyBottomPushed = false;
+        this.keyFire = false;
     }
 
     addKeyDownEvent() {
@@ -51,7 +53,18 @@ export default class RocketMoveManager {
                     }
                 }
             }
+
+            if(number === KEY_FIRE) {
+                if(this.keyFire === false) {
+                    this.keyFire = true;
+                    this.fireCallback();
+                }
+            }
         };
+    }
+
+    initFireCallback(fireCallback) {
+        this.fireCallback = fireCallback;
     }
 
     addKeyUpEvent() {
@@ -64,6 +77,9 @@ export default class RocketMoveManager {
                     break;
                 case KEY_BOTTOM:
                     this.keyBottomPushed = false;
+                    break;
+                case KEY_FIRE:
+                    this.keyFire = false;
                     break;
             }
         };

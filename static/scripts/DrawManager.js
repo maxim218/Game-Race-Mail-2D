@@ -98,8 +98,20 @@ export default class DrawManager {
         this.enemiesArr = enemiesArr;
     }
 
+    initAmmoArray(ammoArr) {
+        this.ammoArr = ammoArr;
+    }
+
     initImageLoader(imageLoader) {
         this.imageLoader = imageLoader;
+    }
+
+    drawAllAmmo() {
+        if(this.ammoArr) {
+            this.ammoArr.forEach((ammo) => {
+                this.holst.drawImage(this.imageLoader.getBall(), ammo.x, ammo.y, ENEMY_SIZE, ENEMY_SIZE);
+            });
+        }
     }
 
     drawAllEnemies() {
@@ -130,5 +142,6 @@ export default class DrawManager {
         this.drawSimpleBackGround();
         this.drawRocket();
         this.drawAllEnemies();
+        this.drawAllAmmo();
     }
 }
