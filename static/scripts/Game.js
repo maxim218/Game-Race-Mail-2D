@@ -58,6 +58,7 @@ class Game {
     constructor() {
         LogMessage("create Game");
         this.drawManager = new DrawManager(document.querySelector(".canvasPlain"));
+        this.initAmmo();
         this.initLive();
         this.initGenerateLiveCount();
         this.initScore();
@@ -70,6 +71,12 @@ class Game {
         this.initGameFlag();
         this.imageLoader = new ImageLoader(this);
         this.drawManager.initImageLoader(this.imageLoader);
+    }
+
+    initAmmo() {
+        this.ammoLabel = document.querySelector(".ammoLabel");
+        this.ammo = 9;
+        this.ammoLabel.innerHTML = this.ammo.toString();
     }
 
     initGenerateLiveCount() {
