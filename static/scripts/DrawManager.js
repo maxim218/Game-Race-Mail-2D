@@ -112,7 +112,13 @@ export default class DrawManager {
 
             this.enemiesArr.forEach((enemy) => {
                 try {
-                    this.holst.drawImage(this.imageLoader.getEnemy(), enemy.x, enemy.y, ENEMY_SIZE, ENEMY_SIZE);
+                    if(!enemy.live) {
+                        this.holst.drawImage(this.imageLoader.getEnemy(), enemy.x, enemy.y, ENEMY_SIZE, ENEMY_SIZE);
+                    } else {
+                        if(enemy.live === true) {
+                            this.holst.drawImage(this.imageLoader.getBonus(), enemy.x, enemy.y, ENEMY_SIZE, ENEMY_SIZE);
+                        }
+                    }
                 } catch (err) {
                     // enemy not loaded
                 }

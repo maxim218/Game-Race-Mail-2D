@@ -52,10 +52,14 @@ const MIDDLE_OPACITY = 0.5;
 
 const DELTA_SCORE = 0.05;
 
+const MAX_LIVE_COUNT = 200;
+
 class Game {
     constructor() {
         LogMessage("create Game");
         this.drawManager = new DrawManager(document.querySelector(".canvasPlain"));
+        this.initLive();
+        this.initGenerateLiveCount();
         this.initScore();
         this.createHeroRocket();
         this.createRocketMoveManager();
@@ -66,6 +70,16 @@ class Game {
         this.initGameFlag();
         this.imageLoader = new ImageLoader(this);
         this.drawManager.initImageLoader(this.imageLoader);
+    }
+
+    initGenerateLiveCount() {
+        this.liveCount = 0;
+    }
+
+    initLive() {
+        this.liveLabel = document.querySelector(".liveLabel");
+        this.live = 2;
+        this.liveLabel.innerHTML = this.live.toString();
     }
 
     initScore() {
@@ -125,21 +139,70 @@ class Game {
                 });
             }
         });
+
+        if(this.liveCount >= MAX_LIVE_COUNT) {
+            this.liveCount = 0;
+            const q = getRandomNumber(100);
+            if(q % 2 === 0) {
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i] === 1) {
+                        this.enemiesArr.push({
+                            x: START_ENEMY_X_POSITION,
+                            y: ENEMY_HEIGHT * i + START_ENEMY_Y_POSITION,
+                            live: true
+                        });
+                        break;
+                    }
+                }
+            } else {
+                for (let i = arr.length - 1; i >= 0; i--) {
+                    if (arr[i] === 1) {
+                        this.enemiesArr.push({
+                            x: START_ENEMY_X_POSITION,
+                            y: ENEMY_HEIGHT * i + START_ENEMY_Y_POSITION,
+                            live: true
+                        });
+                        break;
+                    }
+                }
+            }
+        }
+
         this.printEnemiesNumber();
     }
 
     controlHit() {
         this.enemiesArr.forEach((enemy) => {
            if(enemy.y === this.drawManager.rocket.y) {
-                if(inRangeHit(HIT_LEFT, enemy.x, HIT_RIGHT) === true) {
-                    this.gameFlag = false;
-                }
+               if (inRangeHit(HIT_LEFT, enemy.x, HIT_RIGHT) === true) {
+                   if(!enemy.live) {
+                       enemy.x = -100;
+                       this.live--;
+                   } else {
+                       enemy.x = -100;
+                       this.live++;
+                   }
+               }
 
-                if(inRangeHit(HIT_LEFT, enemy.x + ENEMY_SIZE, HIT_RIGHT) === true) {
-                   this.gameFlag = false;
-                }
+               if (inRangeHit(HIT_LEFT, enemy.x + ENEMY_SIZE, HIT_RIGHT) === true) {
+                   if(!enemy.live) {
+                       enemy.x = -100;
+                       this.live--;
+                   } else {
+                       enemy.x = -100;
+                       this.live++;
+                   }
+               }
            }
         });
+
+        this.liveLabel.innerHTML = this.live.toString();
+
+        if(this.live <= 0) {
+            this.live = 0;
+            this.liveLabel.innerHTML = this.live.toString();
+            this.gameFlag = false;
+        }
     }
 
     killEnemies() {
@@ -186,13 +249,19 @@ class Game {
                     if (this.countRightBorder >= COUNT_LEFT_BORDER) {
                         this.countRightBorder -= DELTA_COUNT_RIGHT_BORDER;
                     }
+
                     this.addEnemiesLine();
+
                     if (this.speed < MAX_SPEED) {
                         this.speed += DELTA_SPEED;
                     }
                     this.printSpeedInfo();
                     this.printCountRightBorderInfo();
                 }
+
+                // inc live count
+                this.liveCount += 1;
+
                 this.killEnemies();
                 this.changeRocketPosition();
                 this.moveAllEnemies();
