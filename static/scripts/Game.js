@@ -129,6 +129,10 @@ class Game {
         this.drawManager.initAmmoArray(this.ammoArr);
     }
 
+    printAmmoArrInfo() {
+        LogMessage("Ammo: " + this.ammoArr.length);
+    }
+
     initGenerateLiveCount() {
         this.liveCount = 0;
     }
@@ -226,6 +230,7 @@ class Game {
         }
 
         this.printEnemiesNumber();
+        this.printAmmoArrInfo();
     }
 
     controlHit() {
